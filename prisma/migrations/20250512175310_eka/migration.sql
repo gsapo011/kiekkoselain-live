@@ -17,7 +17,7 @@ CREATE TABLE "Suosikki" (
     "liito" TEXT NOT NULL,
     "vakaus" TEXT NOT NULL,
     "feidi" TEXT NOT NULL,
-    "stability" TEXT,
     "kuva" TEXT,
+    "stability" TEXT,
     CONSTRAINT "Suosikki_kayttajaId_fkey" FOREIGN KEY ("kayttajaId") REFERENCES "Kayttaja" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

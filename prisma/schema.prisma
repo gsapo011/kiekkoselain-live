@@ -7,15 +7,15 @@ datasource db {
   url      = "file:./data.db"
 }
 
-model kayttaja {
+model Kayttaja {
   id             Int    @id @default(autoincrement())
   kayttajatunnus String
   salasana       String
 
-  suosikit   suosikki[]  // Suosikit-suhde käyttäjälle
+  suosikit   Suosikki[]  // Suosikit-suhde käyttäjälle
 }
 
-model suosikki {
+model Suosikki {
   id         Int      @id @default(autoincrement())
   kayttajaId Int      
   kiekkoId   String   
@@ -29,5 +29,5 @@ model suosikki {
   kuva       String?
   stability  String?
 
-  kayttaja   kayttaja @relation(fields: [kayttajaId], references: [id]) 
+  kayttaja   Kayttaja @relation(fields: [kayttajaId], references: [id]) 
 }
