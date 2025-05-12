@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const router = (0, express_1.Router)();
+const kiekotRouter = (0, express_1.Router)();
 const URL = 'https://discit-api.fly.dev/disc';
 // Muuntaa merkkijonon URL-ystävälliseen muotoon
 const muodostaSlug = (str) => str.toLowerCase().replace(/\s+/g, '-');
@@ -16,7 +16,7 @@ const normalisoiKategoria = (kategoria) => {
     return kategoria;
 };
 // Kiekkojen haku. Suodatus onnistuu valmistajalla, kategorialla sekä lento-ominaisuuksilla
-router.get('/kiekot', async (req, res) => {
+kiekotRouter.get('/kiekot', async (req, res) => {
     const { valmistaja, kategoria, nopeus, liito, vakaus, feidi, nimi } = req.query;
     try {
         const response = await (0, node_fetch_1.default)(URL);
@@ -55,6 +55,7 @@ router.get('/kiekot', async (req, res) => {
         });
         // Palautetaan tietokentät
         const suodatetutKiekot = suodatetut.map((kiekko) => ({
+            id: kiekko.id,
             nimi: kiekko.name,
             valmistaja: kiekko.brand,
             kategoria: normalisoiKategoria(kiekko.category),
@@ -73,7 +74,7 @@ router.get('/kiekot', async (req, res) => {
     }
 });
 // Valmistajien haku (näyttää vain valmistajat)
-router.get('/kiekot/valmistajat', async (_req, res) => {
+kiekotRouter.get('/kiekot/valmistajat', async (_req, res) => {
     try {
         const response = await (0, node_fetch_1.default)(URL);
         const kaikkiKiekot = (await response.json());
@@ -88,7 +89,7 @@ router.get('/kiekot/valmistajat', async (_req, res) => {
     }
 });
 // Haku kiekon nimen perusteella, löytää kiekot osittaisilla nimillä
-router.get('/kiekot/nimi', async (req, res) => {
+kiekotRouter.get('/kiekot/nimi', async (req, res) => {
     const { nimi } = req.query;
     try {
         const response = await (0, node_fetch_1.default)(URL);
@@ -98,7 +99,7 @@ router.get('/kiekot/nimi', async (req, res) => {
             ? kaikkiKiekot.filter((kiekko) => {
                 const nameSlug = kiekko.name.toLowerCase().replace(/\s+/g, '-'); // Muutetaan nimi slug-muotoon
                 const nameSearch = String(nimi).toLowerCase(); // Haettava nimi
-                const regExp = new RegExp(nameSearch, 'i'); // Luo säännöllinen lauseke (case-insensitive)
+                const regExp = new RegExp(nameSearch, 'i');
                 // Tarkistetaan, löytyykö hakusana nimestä tai slugista
                 return regExp.test(kiekko.name.toLowerCase()) || regExp.test(nameSlug);
             })
@@ -120,4 +121,4 @@ router.get('/kiekot/nimi', async (req, res) => {
         res.status(500).json({ virhe: 'Nimen mukaisten kiekkojen haku epäonnistui.' });
     }
 });
-exports.default = router;
+exports.default = kiekotRouter;

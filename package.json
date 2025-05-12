@@ -1,8 +1,8 @@
 {
-  "name": "kiekkoselain",
+  "name": "sovellusohjelmointi-2-oppimistehtava",
   "version": "1.0.0",
-  "description": "Tämä on kiekkoselain",
-  "main": "index.js",
+  "description": "Tämä on repository Sovellusohjelmointi 2 -opintojakson oppimistehtävän palautukseen.",
+  "main": "index.ts",
   "scripts": {
     "start": "node index.js",
     "build": "npm install && npx prisma generate"
@@ -10,14 +10,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "prisma": "^6.7.0"
-  },
   "dependencies": {
     "@prisma/client": "^6.7.0",
     "cors": "^2.8.5",
-    "express": "^5.1.0",
+    "express": "^4.17.1",
     "jsonwebtoken": "^9.0.2",
     "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "prisma": "^6.7.0"
   }
 }
