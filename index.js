@@ -5,16 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
 const kiekotRoutes_1 = __importDefault(require("./routes/kiekotRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const suosikitRoutes_1 = __importDefault(require("./routes/suosikitRoutes"));
 const app = (0, express_1.default)();
 const portti = Number(process.env.PORT) || 3110;
+app.use((0, cors_1.default)());
+app.use(express_1.default.static(path_1.default.resolve(__dirname, 'public')));
 app.use(express_1.default.json());
-app.use((0, cors_1.default)({
-    origin: ['http://localhost:5173', 'https://kiekkoselain.onrender.com'],
-    credentials: true
-}));
 // Reititykset
 app.use('/api', kiekotRoutes_1.default); // /api/kiekot
 app.use('/auth', authRoutes_1.default); // /auth/login, /auth/register
