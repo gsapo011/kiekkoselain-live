@@ -13,6 +13,9 @@ const app = (0, express_1.default)();
 const portti = Number(process.env.PORT) || 3110;
 app.use((0, cors_1.default)());
 app.use(express_1.default.static(path_1.default.resolve(__dirname, 'public')));
+app.get('/', (req, res) => {
+    res.sendFile(path_1.default.resolve(__dirname, 'public', 'index.html'));
+});
 app.use(express_1.default.json());
 // Reititykset
 app.use('/api', kiekotRoutes_1.default); // /api/kiekot
