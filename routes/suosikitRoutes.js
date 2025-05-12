@@ -23,13 +23,30 @@ suosikitRouter.post("/", async (req, res) => {
         // Haetaan kaikki kiekot ulkoisesta API:sta
         const response = await (0, node_fetch_1.default)("https://discit-api.fly.dev/disc");
         const kaikkiKiekot = await response.json();
-        // Etsitään oikea kiekko annetulla  kiekkoId:llä
+        // Etsitään oikea kiekko annetulla kiekkoId:llä
         const kiekko = kaikkiKiekot.find((k) => k.id === kiekkoId);
         // Virheilmoitus, jos kiekkoa ei löydy
         if (!kiekko) {
             console.error("Virhe: Kiekkoa ei löytynyt id:llä", kiekkoId);
             return res.status(404).json({ virhe: "Kiekkoa ei löytynyt annetulla id:llä" });
         }
+        // Debuggaus: tarkistetaan Prisma Clientin tila
+        console.log("Prisma Client:", prisma); // Varmista, että Prisma Client on olemassa
+        console.log("Prisma Clientin suosikki-malli:", prisma ? prisma.suosikki : "ei löytynyt");
+        // Debuggaus: tarkista, että käytettävät tiedot ovat oikein
+        console.log("Suosikin lisäämisen tiedot:", {
+            kayttajaId: kayttajaId,
+            kiekkoId: kiekko.id,
+            nimi: kiekko.name === "<- Tilt" ? "Tilt" : kiekko.name,
+            valmistaja: kiekko.brand,
+            kategoria: kiekko.category === "Disc Golf Sets" ? "Distance Driver" : kiekko.category,
+            nopeus: kiekko.speed,
+            liito: kiekko.glide,
+            vakaus: kiekko.turn,
+            feidi: kiekko.fade,
+            kuva: kiekko.pic ?? null,
+            stability: kiekko.stability_slug,
+        });
         // Lisätään suosikiksi käyttäjälle
         const suosikki = await prisma.suosikki.create({
             data: {
