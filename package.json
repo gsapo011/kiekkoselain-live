@@ -2,7 +2,7 @@
   "name": "sovellusohjelmointi-2-oppimistehtava",
   "version": "1.0.0",
   "description": "Tämä on repository Sovellusohjelmointi 2 -opintojakson oppimistehtävän palautukseen.",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "build": "npm install && npx prisma generate"
