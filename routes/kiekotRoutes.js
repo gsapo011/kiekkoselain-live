@@ -19,11 +19,11 @@ const normalisoiKategoria = (kategoria) => {
 kiekotRouter.get('/kiekot', async (req, res) => {
     const { valmistaja, kategoria, nopeus, liito, vakaus, feidi, nimi } = req.query;
     try {
-        const response = await (0, node_fetch_1.default)(URL);
-        const kaikkiKiekot = (await response.json());
+        const vastaus = await (0, node_fetch_1.default)(URL);
+        const kaikkiKiekot = (await vastaus.json());
         // Korjataan kiekkojen nimiä
         const korjatutKiekot = kaikkiKiekot.map((kiekko) => {
-            kiekko.name = kiekko.name.replace(/<-/, ''); // Poistaa "<-" merkin nimestä, lisää muita merkkejä tarvittaessa
+            kiekko.name = kiekko.name.replace(/<-/, ''); // Nimen korjaus Tiltille, lisää muita jos löytyy
             return kiekko;
         });
         // Suodatetaan kiekot hakuehdoilla
@@ -76,8 +76,8 @@ kiekotRouter.get('/kiekot', async (req, res) => {
 // Valmistajien haku (näyttää vain valmistajat)
 kiekotRouter.get('/kiekot/valmistajat', async (_req, res) => {
     try {
-        const response = await (0, node_fetch_1.default)(URL);
-        const kaikkiKiekot = (await response.json());
+        const vastaus = await (0, node_fetch_1.default)(URL);
+        const kaikkiKiekot = (await vastaus.json());
         // Luodaan set, jotta saadaan vain uniikit valmistajat
         const valmistajat = new Set(kaikkiKiekot.map((kiekko) => kiekko.brand));
         // Palautetaan valmistajat taulukossa
@@ -92,16 +92,17 @@ kiekotRouter.get('/kiekot/valmistajat', async (_req, res) => {
 kiekotRouter.get('/kiekot/nimi', async (req, res) => {
     const { nimi } = req.query;
     try {
-        const response = await (0, node_fetch_1.default)(URL);
-        const kaikkiKiekot = (await response.json());
+        // Haetaan ensin kaikki kiekot
+        const vastaus = await (0, node_fetch_1.default)(URL);
+        const kaikkiKiekot = (await vastaus.json());
         // Tarkistetaan, että nimen haku toimii osittaisella vertailulla
         const tulos = nimi
             ? kaikkiKiekot.filter((kiekko) => {
-                const nameSlug = kiekko.name.toLowerCase().replace(/\s+/g, '-'); // Muutetaan nimi slug-muotoon
-                const nameSearch = String(nimi).toLowerCase(); // Haettava nimi
-                const regExp = new RegExp(nameSearch, 'i');
+                const nimiSlug = kiekko.name.toLowerCase().replace(/\s+/g, '-'); // Muutetaan nimi slug-muotoon
+                const etsiNimi = String(nimi).toLowerCase(); // Haettava nimi pieniksi kirjaimiksi
+                const regExp = new RegExp(etsiNimi, 'i');
                 // Tarkistetaan, löytyykö hakusana nimestä tai slugista
-                return regExp.test(kiekko.name.toLowerCase()) || regExp.test(nameSlug);
+                return regExp.test(kiekko.name.toLowerCase()) || regExp.test(nimiSlug);
             })
             : [];
         // Palautetaan tietokentät

@@ -22,21 +22,21 @@ authRouter.post("/register", async (req, res) => {
             return;
         }
         // Tarkastetaan, onko käyttäjätunnus jo olemassa
-        const existingUser = await prisma.kayttaja.findFirst({
+        const kayttajaOlemassa = await prisma.kayttaja.findFirst({
             where: { kayttajatunnus }
         });
         // Jos kyllä, virhe
-        if (existingUser) {
+        if (kayttajaOlemassa) {
             res.status(400).json({ virhe: "Käyttäjätunnus käytössä." });
             return;
         }
         // Salasanan hashays
-        const hashedPassword = crypto_1.default.createHash("SHA256").update(salasana).digest("hex");
+        const hashattySalasana = crypto_1.default.createHash("SHA256").update(salasana).digest("hex");
         // Käyttäjän luonti tietokantaan, ja ilmoitus onnistumisesta tai virheestä
         await prisma.kayttaja.create({
             data: {
                 kayttajatunnus,
-                salasana: hashedPassword
+                salasana: hashattySalasana
             }
         });
         res.status(201).json({ viesti: "Rekisteröinti onnistui." });
@@ -120,7 +120,7 @@ authRouter.get('/validate-token', (req, res) => {
         return res.status(401).json({ virhe: 'Token puuttuu' });
     }
     try {
-        // Verifioidaan token salausavaimella
+        // Varmistetaan token salausavaimella
         const decoded = jsonwebtoken_1.default.verify(token, 'ToinenSalausLause_25');
         // Debug: console.log('Token vahvistettu:', decoded);
         res.status(200).json({ viesti: 'Token on voimassa', kayttaja: decoded });

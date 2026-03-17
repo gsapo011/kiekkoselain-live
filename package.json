@@ -1,7 +1,7 @@
 {
-  "name": "sovellusohjelmointi-2-oppimistehtava",
+  "name": "kiekkoselain",
   "version": "1.0.0",
-  "description": "Tämä on repository Sovellusohjelmointi 2 -opintojakson oppimistehtävän palautukseen.",
+  "description": "Kiekkoselain frisbeegolfkiekkojen selailuun.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -10,7 +10,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^6.7.0",
     "cors": "^2.8.5",
